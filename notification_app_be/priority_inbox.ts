@@ -14,7 +14,8 @@ interface Notification {
   Timestamp: string;
 }
 
-// weight by type - placement > result > event
+// placement matters most, then result, then event
+// multiplying by big number so type always dominates over time
 function getTypeWeight(type: string): number {
   if (type === "Placement") return 3;
   if (type === "Result") return 2;

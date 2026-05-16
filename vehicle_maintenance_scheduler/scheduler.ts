@@ -19,7 +19,8 @@ interface Vehicle {
   Impact: number;
 }
 
-// knapsack algorithm - picks best tasks within mechanic hour budget
+// using dp here basically the 0/1 knapsack problem
+// tried greedy first but it doesnt give optimal resultss
 function knapsack(vehicles: Vehicle[], budget: number) {
   const n = vehicles.length;
   const dp: number[][] = Array.from({ length: n + 1 }, () =>
