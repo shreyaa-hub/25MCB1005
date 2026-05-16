@@ -184,3 +184,18 @@ why this is better:
 - workers handle emails async, server stays unblocked
 - auto retry 3 times on failure
 - email failure doesnt touch DB records or push notifications
+
+## Stage 6
+
+built a priority inbox that ranks notifications by type weight and recency.
+
+scoring logic:
+- Placement = weight 3, Result = weight 2, Event = weight 1
+- score = typeWeight * 1000000 + timestamp in seconds
+- higher score = shows up first
+
+this means a recent Placement always beats an older one, and Placements always beat Results which beat Events. new notifications coming in will naturally get higher recency scores so the ranking stays accurate without any extra work.
+
+to maintain top 10 efficiently as new notifications come in - i'd use a min-heap of size 10. every new notification gets scored and compared against the minimum in the heap. if its score is higher, it replaces the min. this keeps it O(log 10) = O(1) effectively, no need to re-sort everything each time.
+
+code is in notification_app_be/priority_inbox.ts
